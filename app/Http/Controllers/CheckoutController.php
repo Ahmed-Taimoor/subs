@@ -10,8 +10,7 @@ class CheckoutController extends Controller
     public function index($id)
     {
         $product = Product::find($id);
-        
-        if(!$product) {
+        if (!$product) {
             abort(404);
             die;
         }
