@@ -38,6 +38,10 @@
                             {{ __('Profile') }}
                         </x-dropdown-link>
 
+                        <x-dropdown-link :href="route('wallet.index')">
+                            {{ __('Wallet') }}
+                        </x-dropdown-link>
+
                         <!-- Authentication -->
                         <form method="POST" action="{{ route('logout') }}">
                             @csrf
@@ -48,6 +52,7 @@
                                 {{ __('Log Out') }}
                             </x-dropdown-link>
                         </form>
+
                     </x-slot>
                 </x-dropdown>
             </div>
@@ -94,6 +99,10 @@
                         {{ __('Log Out') }}
                     </x-responsive-nav-link>
                 </form>
+                <x-responsive-nav-link :href="route('wallet.index')">
+                    {{ __('Wallet') }}
+                </x-responsive-nav-link>
+
             </div>
         </div>
     </div>

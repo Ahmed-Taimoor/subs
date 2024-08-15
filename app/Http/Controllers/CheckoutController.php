@@ -11,9 +11,12 @@ class CheckoutController extends Controller
     {
         $product = Product::find($id);
         if (!$product) {
+
             abort(404);
             die;
         }
         return view('checkout', compact('product'));
     }
+
+
 }

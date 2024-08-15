@@ -1,61 +1,29 @@
 
 <x-app-layout>
+    <div class="max-w-4xl mx-auto p-6 bg-white rounded-lg shadow-md mt-10">
+        <h1 class="text-2xl font-semibold text-gray-800 mb-6">Six Months Membership</h1>
 
+        <h2 class="text-xl font-medium text-gray-700 mb-4">Product Details</h2>
 
-<div class="checkout-container">
-    <div class="product-details">
-    <h1>Six Months Membership</h1>
-        <h2>Product Details</h2>
-        <div class="product-card">
-            <img src="{{$product->image}}" alt="Product Image">
-            <div class="product-info">
-                <h3>{{$product->title}}</h3>
-                <p>{{$product->description}}</p>
-                <p><strong>Price:</strong> ${{$product->price}}</p>
+        <div class="product-card flex items-start bg-gray-100 p-4 rounded-lg shadow-md">
+            <img class="w-48 h-48 object-cover rounded-lg" src="{{$product->image}}" alt="Product Image">
+
+            <div class="product-info ml-6">
+                <h3 class="text-lg font-semibold text-gray-800 mb-2">{{$product->title}}</h3>
+                <p class="text-gray-600 mb-4">{{$product->description}}</p>
+                <p class="text-gray-800 text-lg font-semibold mb-4"><strong>Price:</strong> ${{$product->price}}</p>
+
+                <!-- Purchase Button -->
+                <form action="{{ route('checkout.store') }}" method="POST" class="inline-block">
+                    @csrf
+                    <input type="hidden" name="product_id" value="{{ $product->id }}">
+                    <button type="submit" class="bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 transition duration-300">
+                        Purchase
+                    </button>
+                </form>
+
             </div>
         </div>
     </div>
-    <div class="checkout-form-container">
-        <h2>Checkout</h2>
-        <form class="checkout-form">
-            <div class="form-group">
-                <label for="name">Full Name</label>
-                <input type="text" id="name" name="name" required>
-            </div>
-            <div class="form-group">
-                <label for="email">Email Address</label>
-                <input type="email" id="email" name="email" required>
-            </div>
-            <div class="form-group">
-                <label for="address">Address</label>
-                <input type="text" id="address" name="address" required>
-            </div>
-            <div class="form-group">
-                <label for="city">City</label>
-                <input type="text" id="city" name="city" required>
-            </div>
-            <div class="form-group">
-                <label for="state">State</label>
-                <input type="text" id="state" name="state" required>
-            </div>
-            <div class="form-group">
-                <label for="zip">Zip Code</label>
-                <input type="text" id="zip" name="zip" required>
-            </div>
-            <div class="form-group">
-                <label for="card">Credit Card Number</label>
-                <input type="text" id="card" name="card" required>
-            </div>
-            <div class="form-group">
-                <label for="exp">Expiration Date</label>
-                <input type="text" id="exp" name="exp" required>
-            </div>
-            <div class="form-group">
-                <label for="cvv">CVV</label>
-                <input type="text" id="cvv" name="cvv" required>
-            </div>
-            <button type="submit" class="purchase-button">Complete Purchase</button>
-        </form>
-    </div>
-</div>
 </x-app-layout>
+
