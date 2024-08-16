@@ -45,6 +45,19 @@ class User extends Authenticatable
         ];
     }
 
+    public function transactions()
+    {
+        return $this->hasMany(Transaction::class);
+    }
+
+    public function calculateTotalAmount()
+    {
+        $creditSum = $this->transactions()->where('transaction_type', 'credit')->sum('amount');
+        $debitSum = $this->transactions()->where('transaction_type', 'debit')->sum('amount');
+
+        return $creditSum - $debitSum;
+    }
+
     public function wallet()
     {
         return $this->hasOne(Wallet::class);

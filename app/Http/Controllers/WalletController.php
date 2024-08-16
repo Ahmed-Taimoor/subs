@@ -20,7 +20,7 @@ class WalletController extends Controller
         return redirect()->back();
     }
 
-    public function update(Request $request)
+    public function create(Request $request)
     {
 
         $validatedWallet = $request->validate([
