@@ -2,15 +2,16 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\UserPurchasedProduct;
 use App\Models\PurchaseItem;
-use App\Models\Wallet;
+use App\Models\Transaction;
 use App\Models\Product;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class PurchaseItemController extends Controller
 {
-    public function store()
+    public function store(Request $request)
     {
         $product_id = $_POST['product_id'];
         $subscription_in_months = 6;
@@ -20,50 +21,46 @@ class PurchaseItemController extends Controller
             abort(404);
             die;
         }
-
         $user = Auth::user();
         if (!$user) {
             return redirect('login');
         }
-        if (isset($user->purchaseItem->product_id)) {
-            if ($user->purchaseItem->product_id == $product_id) {
-                return "Already bought this item";
 
-                return view('wallet')->with([
-                    'wallet' => $user->wallet,
-                    'purchase_item' => "",
-                    'payment_unsccessful' => ""
-                ]);
+        $productsArr = UserPurchasedProduct::getProductByUserId($user->id);
 
+        if (isset($productsArr) && !empty($productsArr)) {
+            foreach ($productsArr as $item) {
+                if ($item['id'] == $product_id) {
+                    return view('wallet')->with([
+                        'user' => $user,
+                        'products'=> $productsArr
+                    ]);
+                }
             }
         }
 
-
-        $wallet = $user->wallet;
-        $walletAmount = $wallet->amount;
+        $walletAmount = $user->calculateTotalAmount();
         $product = Product::find($product_id);
 
         if ($walletAmount >= $product->price) {
-            $wallet->update([
-                'amount' => ($walletAmount - $product->price)
+            $payment_successful = Transaction::create([
+                'user_id' => $user->id,
+                'transaction_type' => 'debit',
+                'amount' => $product->price
             ]);
-
-            for ($i = 1; $i <= $subscription_in_months; $i++) {
-                PurchaseItem::create([
-                    'user_id' => $user->id,
-                    'product_id' => $product_id,
-                    'payment_successful' => $i === 1 ? '1' : '0'
-                ]);
-            }
-            return "done";
-            // return view('wallet')->with([
-            //     'wallet' => $user->wallet,
-            //     'purchase_item' => "",
-            //     'payment_unsccessful' => ""
-            // ]);
-
+            PurchaseItem::create([
+                'user_id' => $user->id,
+                'product_id' => $product_id,
+                'payment_successful' => $payment_successful ? '1' : '0'
+            ]);
+            return view('wallet')->with([
+                'user' => $user,
+                'products'=> $productsArr
+            ]);
         }
 
-        return view('checkout', compact('product'));
+        return view('profile.edit', [
+            'user' => $request->user(),
+        ]);
     }
 }

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\ProfileUpdateRequest;
+use App\Models\Transaction;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -56,5 +57,20 @@ class ProfileController extends Controller
         $request->session()->regenerateToken();
 
         return Redirect::to('/');
+    }
+    public function creditAmount(Request $request){
+
+        $validatedData = $request->validate([
+            'amount_to_credit' => 'required|string',
+        ]);
+
+        $user = $request->user();
+
+        return Transaction::create([
+            'user_id' => $user->id,
+            'transaction_type' => 'credit',
+            'amount' => $validatedData['amount_to_credit']
+        ]);
+
     }
 }

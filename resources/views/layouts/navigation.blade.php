@@ -38,9 +38,6 @@
                             {{ __('Profile') }}
                         </x-dropdown-link>
 
-                        <x-dropdown-link :href="route('wallet.index')">
-                            {{ __('Wallet') }}
-                        </x-dropdown-link>
 
                         <!-- Authentication -->
                         <form method="POST" action="{{ route('logout') }}">
@@ -99,9 +96,7 @@
                         {{ __('Log Out') }}
                     </x-responsive-nav-link>
                 </form>
-                <x-responsive-nav-link :href="route('wallet.index')">
-                    {{ __('Wallet') }}
-                </x-responsive-nav-link>
+
 
             </div>
         </div>

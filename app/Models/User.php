@@ -52,16 +52,15 @@ class User extends Authenticatable
 
     public function calculateTotalAmount()
     {
-        $creditSum = $this->transactions()->where('transaction_type', 'credit')->sum('amount');
-        $debitSum = $this->transactions()->where('transaction_type', 'debit')->sum('amount');
-
-        return $creditSum - $debitSum;
+        if($this->transactions){
+            $creditSum = $this->transactions()->where('transaction_type', 'credit')->sum('amount');
+            $debitSum = $this->transactions()->where('transaction_type', 'debit')->sum('amount');
+            return $creditSum - $debitSum;
+        }
+        return 0;
     }
 
-    public function wallet()
-    {
-        return $this->hasOne(Wallet::class);
-    }
+
 
     public function purchaseItem()
     {
