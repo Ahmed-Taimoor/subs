@@ -50,17 +50,24 @@ class User extends Authenticatable
         return $this->hasMany(Transaction::class);
     }
 
+    public function getWalletBalanceAttribute()
+    {
+        return $this->calculateTotalAmount();
+    }
+
     public function calculateTotalAmount()
     {
-        if($this->transactions){
-            $creditSum = $this->transactions()->where('transaction_type', 'credit')->sum('amount');
-            $debitSum = $this->transactions()->where('transaction_type', 'debit')->sum('amount');
+        if ($this->transactions) {
+            $creditSum = $this->transactions()
+                ->where('transaction_type', 'credit')
+                ->sum('amount');
+            $debitSum = $this->transactions()
+                ->where('transaction_type', 'debit')
+                ->sum('amount');
             return $creditSum - $debitSum;
         }
         return 0;
     }
-
-
 
     public function purchaseItem()
     {

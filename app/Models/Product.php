@@ -9,8 +9,4 @@ class Product extends Model
 {
     use HasFactory;
 
-    public function purchaseItem()
-    {
-        return $this->hasMany(PurchaseItem::class);
-    }
 }

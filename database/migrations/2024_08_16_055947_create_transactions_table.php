@@ -13,7 +13,7 @@ return new class extends Migration {
         Schema::create('transactions', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('user_id');
-            $table->enum('transaction_type', ['debit', 'credit']);
+            $table->enum('transaction_type', ['debit', 'credit'])->default('debit');
             $table->decimal('amount', 15, 2);
 
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
